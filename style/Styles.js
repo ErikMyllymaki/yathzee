@@ -43,7 +43,7 @@ export default StyleSheet.create({
         backgroundColor: 'tomato',
         borderRadius: 6,
         marginTop: 10,
-        // width: 60,
+        alignItems: 'center',
     },
 
     buttonText: {
@@ -51,7 +51,6 @@ export default StyleSheet.create({
         color: 'white',
         paddingHorizontal: 20,
     },
-
 
     textInput: {
         marginTop: 5,
@@ -74,5 +73,9 @@ export default StyleSheet.create({
 
     rules: {
         padding: 20
-    }
+    },
+
+    flex: {
+        flexDirection: "row"
+      },
   });
