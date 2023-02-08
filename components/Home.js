@@ -11,11 +11,12 @@ export default function Home() {
     const [showRules, setShowRules] = useState(true);
 
     const Game = () => {
-
         if (showRules) {
             return (
                 <View style={Styles.container}>
-                    <Text>{name}</Text>
+                    <Text style={Styles.heading}>Rules of the game</Text>
+                    <Text style={Styles.rules}>lorem ipsum</Text>
+                    <Text style={Styles.name}>Good luck, {name}</Text>
                     <Pressable 
                     style={Styles.button} 
                     onPress={() => setShowRules(false)}

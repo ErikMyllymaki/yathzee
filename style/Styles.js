@@ -61,4 +61,17 @@ export default StyleSheet.create({
         width: 150,
         color: 'white'
     },
+
+    name: {
+        fontSize: 20,
+    },
+
+    heading: {
+        fontSize: 22,
+        fontWeight: 'bold',
+    },
+
+    rules: {
+        padding: 15
+    }
   });
