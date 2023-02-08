@@ -10,7 +10,6 @@ export default function App() {
     <View style={Styles.app}>
       <Header />
       <Home />
-      {/* <Gameboard /> */}
       <Footer />
     </View>
   );
