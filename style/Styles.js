@@ -62,8 +62,9 @@ export default StyleSheet.create({
         color: 'white'
     },
 
-    name: {
+    info: {
         fontSize: 20,
+        marginBottom: 10
     },
 
     heading: {
@@ -72,6 +73,6 @@ export default StyleSheet.create({
     },
 
     rules: {
-        padding: 15
+        padding: 20
     }
   });
