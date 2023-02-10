@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Styles from '../style/Styles';
 import { View, Text, Pressable } from 'react-native';
 import Icon from '@expo/vector-icons/MaterialCommunityIcons';
-import {
-        NBR_OF_DICES,
+import {NBR_OF_DICES,
         NBR_OF_THROWS,
         MIN_SPOT,
         MAX_SPOT,
