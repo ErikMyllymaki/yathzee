@@ -11,14 +11,22 @@ import {NBR_OF_DICES,
 
 let board = [];
 
-export default function Gameboard() {
+export default function Gameboard( {route} ) {
+
 
   const [nbrOfThrowsLeft, setNbrOfThrowsLeft] = useState(NBR_OF_THROWS);
   const [status, setStatus] = useState('');
-  const [sum, setSum] = useState(0);
+  const [name, setName] = useState('');
   const [sumsOfNumbers, setSumsOfNumbers] = useState([0,0,0,0,0,0]);
   const [totalPoints, setTotalPoints] = useState(0);
 
+  useEffect(() => {
+    if (name === '' && route.params?.player ) {
+      setName(route.params.player);
+    }
+  
+  }, [])
+  
 
   const throwDices = () => {
     for (let i = 0; i < NBR_OF_DICES; i++) {
@@ -38,8 +46,8 @@ export default function Gameboard() {
   for (let i = 0; i < NBR_OF_DICES; i++) {
     diceRow.push(
       <Icon 
+        key={'dicerow' + i}
         name={board[i]}
-        key={"dicerow" + i}
         size={50}
         color='tomato'
       />
@@ -49,12 +57,11 @@ export default function Gameboard() {
   const numRow = [];
   for (let i = 1; i < 7; i++) {
     numRow.push(
-      <View  style={{justifyContent:'center', alignItems:'center'}}>
+      <View style={{justifyContent:'center', alignItems:'center'}}>
       <Text>{sumsOfNumbers[i - 1]}</Text>
-        <Pressable>
-          <Icon 
+        <Pressable key={'numrow' + i}>
+          <Icon
               name={'numeric-' + [i] + '-circle'}
-              key={"numrow" + i}
               size={32}
               color='tomato'
           />
@@ -72,6 +79,9 @@ export default function Gameboard() {
         <Text>{diceRow}</Text>
         <Text style={Styles.info}>
           Throws left: {nbrOfThrowsLeft}
+        </Text>
+        <Text style={Styles.info}>
+          Player: {name}
         </Text>
         <Text style={Styles.info}>
           {status}

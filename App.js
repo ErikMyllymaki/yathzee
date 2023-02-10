@@ -17,15 +17,11 @@ export default function App() {
     <NavigationContainer>
       <Header />
       <Tab.Navigator>
-        <Tab.Screen name='Home' component={Home}/>
-        <Tab.Screen name='Gameboard' component={Gameboard}/>
-        <Tab.Screen name='Scoreboard' component={Scoreboard}/>
+        <Tab.Screen name='Home' component={Home} options={{tabBarStyle: {display: 'none'}}}/>
+        <Tab.Screen name='Gameboard' component={Gameboard} options={{tabBarStyle: {backgroundColor: 'tomato'}}}/>
+        <Tab.Screen name='Scoreboard' component={Scoreboard} options={{tabBarStyle: {backgroundColor: 'tomato'}}} />
       </Tab.Navigator>
       <Footer />
     </NavigationContainer>
-    // <View style={Styles.app}>
-    //   <Home />
-    //   {/* <Gameboard /> */}
-    // </View>
   );
 }

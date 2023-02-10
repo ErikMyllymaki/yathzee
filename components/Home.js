@@ -5,7 +5,7 @@ import Gameboard from './Gameboard';
 import Icon from '@expo/vector-icons/AntDesign'
 
 
-export default function Home() {
+export default function Home( {navigation} ) {
 
     const [name, setName] = useState('');
     const [checkName, setCheckName] = useState(false);
@@ -34,7 +34,7 @@ export default function Home() {
                     <Text style={Styles.info}>Good luck, {name}</Text>
                     <Pressable
                         style={Styles.button}
-                        // onPress={() => setShowRules(false)}
+                        onPress={() => navigation.navigate('Gameboard', {player:name})}
                     >
                         <Text style={Styles.buttonText}>Play</Text>
                     </Pressable>
