@@ -19,12 +19,15 @@ export default function Gameboard( {route} ) {
   const [name, setName] = useState('');
   const [sumsOfNumbers, setSumsOfNumbers] = useState([0,0,0,0,0,0]);
   const [totalPoints, setTotalPoints] = useState(0);
+  const [selectedDices, setSelectedDices] = 
+    useState(new Array(NBR_OF_DICES).fill(false));
+  const [selectedNumbers, setSelectedNumbers] = 
+    useState(new Array(6).fill(false));
 
   useEffect(() => {
     if (name === '' && route.params?.player ) {
       setName(route.params.player);
     }
-  
   }, [])
   
 
@@ -38,32 +41,81 @@ export default function Gameboard( {route} ) {
     }
   }
 
-  // const checkBonusPoints = () => {
+  function getDiceColor(i) {
+    if (board.every((val, i, arr) => val === arr[0])) {
+      return "lightgreen";
+    }
+    else {
+      return selectedDices[i] ? "black" : "tomato";
+    }
+  }
 
-  // }
+  function getNumberColor(i) {
+    if (sumsOfNumbers.every((val, i, arr) => val === arr[0])) {
+      return selectedNumbers[i] ? "black" : "tomato";
+    }
+    // else {
+    //   return selectedNumbers[i] ? "black" : "tomato";
+    // }
+  }
+
+  function selectDice(i) {
+    let dices = [...selectedDices];
+    dices[i] = selectedDices[i] ? false : true;
+    setSelectedDices(dices);
+  }
+
+  function selectNumber(i) {
+    let numbers = [...selectedNumbers];
+    numbers[i] = selectedNumbers[i] ? false : true;
+    setSelectedNumbers(numbers);
+  }
+
+  const CheckBonusPoints = () => {
+    if (totalPoints > 62) {
+      setTotalPoints(totalPoints + 50)
+      return (
+        <Text>Congrats! Bonus points (50) added</Text>
+      )
+    } else {
+      return (
+        <Text>You are points away from bonus</Text>
+      )
+    }
+
+  }
 
   const diceRow = [];
   for (let i = 0; i < NBR_OF_DICES; i++) {
     diceRow.push(
-      <Icon 
-        key={'dicerow' + i}
-        name={board[i]}
-        size={50}
-        color='tomato'
-      />
+      <Pressable
+        onPress={() => selectDice(i)}
+        key={"dicerow" + i}
+      >
+        <Icon 
+          key={'dicerow' + i}
+          name={board[i]}
+          size={50}
+          color={getDiceColor(i)}
+        />
+      </Pressable>
+
     );
   }
 
   const numRow = [];
-  for (let i = 1; i < 7; i++) {
+  for (let i = 0; i < 6; i++) {
     numRow.push(
       <View style={{justifyContent:'center', alignItems:'center'}}>
-      <Text>{sumsOfNumbers[i - 1]}</Text>
-        <Pressable key={'numrow' + i}>
+      <Text>{sumsOfNumbers[i]}</Text>
+        <Pressable 
+          key={'numrow' + i}
+          onPress={() => selectNumber(i)}
+        >
           <Icon
-              name={'numeric-' + [i] + '-circle'}
+              name={'numeric-' + [i+1] + '-circle'}
               size={32}
-              color='tomato'
+              color={getNumberColor(i)}
           />
         </Pressable>
 
@@ -93,6 +145,9 @@ export default function Gameboard( {route} ) {
           <Text style={Styles.buttonText}>Throw dices</Text>
         </Pressable>
         <Text style={{fontSize:30, marginTop: 25}}>Total: {totalPoints}</Text>
+        <View>
+          <CheckBonusPoints />
+        </View>
         <Text>{numRow}</Text>
       </View>
   )

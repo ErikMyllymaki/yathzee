@@ -30,6 +30,8 @@ export default StyleSheet.create({
         backgroundColor: 'tomato',
         justifyContent: 'center',
         alignItems: 'center',
+        borderTopWidth: 1,
+        borderTopColor: '#E6EEFF',
     },
 
     author: {
