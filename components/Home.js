@@ -34,18 +34,19 @@ export default function Home() {
                     <Text style={Styles.info}>Good luck, {name}</Text>
                     <Pressable
                         style={Styles.button}
-                        onPress={() => setShowRules(false)}
+                        // onPress={() => setShowRules(false)}
                     >
                         <Text style={Styles.buttonText}>Play</Text>
                     </Pressable>
                 </View>
 
             )
-        } else {
-            return (
-                <Gameboard />
-            )
-        }
+        } 
+        // else {
+        //     return (
+        //         <Gameboard />
+        //     )
+        // }
 
     }
 

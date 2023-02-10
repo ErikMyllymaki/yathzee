@@ -13,7 +13,7 @@ let board = [];
 
 export default function Gameboard() {
 
-  const [nbrOfThrowsLeft, setNbrOfThrowsLeft] = useState(0);
+  const [nbrOfThrowsLeft, setNbrOfThrowsLeft] = useState(NBR_OF_THROWS);
   const [status, setStatus] = useState('');
   const [sum, setSum] = useState(0);
   const [sumsOfNumbers, setSumsOfNumbers] = useState([0,0,0,0,0,0]);
@@ -25,7 +25,9 @@ export default function Gameboard() {
       let randomNumber = Math.floor(Math.random() * 6 + 1);
       board[i] = 'dice-' + randomNumber;
     }
-    setNbrOfThrowsLeft(nbrOfThrowsLeft - 1);
+    if (nbrOfThrowsLeft > 0) {
+      setNbrOfThrowsLeft(nbrOfThrowsLeft - 1);
+    }
   }
 
   // const checkBonusPoints = () => {
