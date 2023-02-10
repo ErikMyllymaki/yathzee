@@ -15,17 +15,17 @@ export default function App() {
 
   return (
     <NavigationContainer>
+      <Header />
       <Tab.Navigator>
         <Tab.Screen name='Home' component={Home}/>
         <Tab.Screen name='Gameboard' component={Gameboard}/>
         <Tab.Screen name='Scoreboard' component={Scoreboard}/>
       </Tab.Navigator>
+      <Footer />
     </NavigationContainer>
     // <View style={Styles.app}>
-    //   <Header />
     //   <Home />
     //   {/* <Gameboard /> */}
-    //   <Footer />
     // </View>
   );
 }
