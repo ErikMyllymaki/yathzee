@@ -83,28 +83,22 @@ export default function Gameboard({ route }) {
     dices[i] = selectedDices[i] ? false : board[i];
     setSelectedDices(dices);
   }
-
   function selectNumber(i) {
-    // if (turn) {
-    let numbers = [...selectedNumbers];
-    numbers[i] = selectedNumbers[i] ? false : true;
-    setSelectedNumbers(numbers);
-    // }
-    // if (sumsOfNumbers[i] ) {
+    if (selectedDices.includes(i+1)) {
+      let numbers = [...selectedNumbers];
+      numbers[i] = selectedNumbers[i] ? false : true;
+      setSelectedNumbers(numbers);
       let sum = 0;
-      // for (let j = 0; j < selectedDices.length; j++) {
-      //   if (selectedDices) {
-      //     sum = j * sumsOfNumbers[i]
-      //   }
-      // }
-
-    if (selectedDices.includes()) {
-      
-    }
+      for (let j = 0; j < selectedDices.length; j++) {
+        if (selectedDices[j] === board[j]) {
+          sum += board[j]
+        }
+      }
       const updatedSumsOfNumbers = [...sumsOfNumbers];
-      updatedSumsOfNumbers[i] = (i+1) * sumsOfNumbers[i]
+      updatedSumsOfNumbers[i] = sum;
       setSumsOfNumbers(updatedSumsOfNumbers);
-    // }
+    }
+
   }
 
   function checkBonusPoints() {
@@ -199,7 +193,6 @@ export default function Gameboard({ route }) {
       <View>{!turn ? <Text>Vuoro ei käynnis</Text> : <Text>Vuoro käynnis</Text>}</View>
       <Text>{`Current State: [${selectedDices.join(', ')}]`}</Text>
       <Text>{`Current State: [${board.join(', ')}]`}</Text>
-
     </View>
   )
 }
