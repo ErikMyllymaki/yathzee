@@ -27,7 +27,6 @@ export default function Gameboard({ route }) {
     useState(new Array(6).fill(false));
   const [selectedNumber, setSelectedNumber] = useState(null);
 
-  // useState(new Array(6).fill(false));
 
   useEffect(() => {
     if (name === '' && route.params?.player) {
@@ -57,29 +56,8 @@ export default function Gameboard({ route }) {
         board[i] = randomNumber;
       }
     }
-    // if (nbrOfThrowsLeft > 0) {
     setNbrOfThrowsLeft(nbrOfThrowsLeft - 1);
-    // setSelectedNumbers(new Array(6).fill(false));
-    // }
   }
-
-  // function getDiceColor(i) {
-  //   if (board.every((val, i, arr) => val === arr[0])) {
-  //     return "lightgreen";
-  //   }
-  //   else {
-  //     return selectedDices[i] ? "black" : "tomato";
-  //   }
-  // }
-
-  // function getNumberColor(i) {
-  //   if (sumsOfNumbers.every((val, i, arr) => val === arr[0])) {
-  //     return selectedNumbers[i] ? "black" : "tomato";
-  //   }
-  //   // else {
-  //   //   return selectedNumbers[i] ? "black" : "tomato";
-  //   // }
-  // }
 
   function selectDice(i) {
     let dices = [...selectedDices];
@@ -139,7 +117,6 @@ export default function Gameboard({ route }) {
           onPress={() => selectNumber(i)}
         >
           <Text style={{
-            // backgroundColor:selectedNumbers[i] ? "black" : "tomato",     
             textAlign: 'center'
           }}
             key={'numrow' + i}
