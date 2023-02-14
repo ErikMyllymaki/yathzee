@@ -25,6 +25,9 @@ export default function Gameboard({ route }) {
     useState(new Array(NBR_OF_DICES).fill(false));
   const [selectedNumbers, setSelectedNumbers] =
     useState(new Array(6).fill(false));
+  const [selectedNumber, setSelectedNumber] = useState(null);
+
+  // useState(new Array(6).fill(false));
 
   useEffect(() => {
     if (name === '' && route.params?.player) {
@@ -56,7 +59,7 @@ export default function Gameboard({ route }) {
     }
     // if (nbrOfThrowsLeft > 0) {
     setNbrOfThrowsLeft(nbrOfThrowsLeft - 1);
-    setSelectedNumbers(new Array(6).fill(false));
+    // setSelectedNumbers(new Array(6).fill(false));
     // }
   }
 
@@ -84,20 +87,13 @@ export default function Gameboard({ route }) {
     setSelectedDices(dices);
   }
   function selectNumber(i) {
-    if (selectedDices.includes(i+1)) {
-      let numbers = [...selectedNumbers];
-      numbers[i] = selectedNumbers[i] ? false : true;
-      setSelectedNumbers(numbers);
-      let sum = 0;
-      for (let j = 0; j < selectedDices.length; j++) {
-        if (selectedDices[j] === board[j]) {
-          sum += board[j]
-        }
-      }
-      const updatedSumsOfNumbers = [...sumsOfNumbers];
-      updatedSumsOfNumbers[i] = sum;
-      setSumsOfNumbers(updatedSumsOfNumbers);
-    }
+    let numbers = [...selectedNumbers];
+    numbers[i] = selectedNumbers[i] ? false : true;
+    setSelectedNumbers(numbers);
+    setSelectedNumber(i);
+    const updatedSumsOfNumbers = [...sumsOfNumbers];
+    updatedSumsOfNumbers[i - 1] = board.filter((val) => val === i).reduce((acc, val) => acc + val, 0);
+    setSumsOfNumbers(updatedSumsOfNumbers);
 
   }
 
@@ -135,7 +131,7 @@ export default function Gameboard({ route }) {
   }
 
   const numRow = [];
-  for (let i = 0; i < 6; i++) {
+  for (let i = 1; i < 7; i++) {
     numRow.push(
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>
         <Pressable
@@ -147,9 +143,9 @@ export default function Gameboard({ route }) {
             textAlign: 'center'
           }}
             key={'numrow' + i}
-          >{sumsOfNumbers[i]}</Text>
+          >{sumsOfNumbers[i - 1]}</Text>
           <Icon
-            name={'numeric-' + [i + 1] + '-circle'}
+            name={'numeric-' + [i] + '-circle'}
             size={32}
             color={selectedNumbers[i] ? "black" : "tomato"}
           />
