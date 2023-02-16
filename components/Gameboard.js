@@ -69,10 +69,10 @@ export default function Gameboard({ route }) {
   }
 
   function selectNumber(i) {
+    let numbers = [...selectedNumbers];
     if (nbrOfThrowsLeft === 0) {
       if (!selectedNumbers[i]) {
-        let numbers = [...selectedNumbers];
-        numbers[i] = selectedNumbers[i] ? false : true;
+        numbers[i-1] = true;
         setSelectedNumbers(numbers);
         setSelectedNumber(i);
         const updatedSumsOfNumbers = [...sumsOfNumbers];
@@ -80,6 +80,9 @@ export default function Gameboard({ route }) {
         setSumsOfNumbers(updatedSumsOfNumbers);
         setNbrOfThrowsLeft(NBR_OF_THROWS);
         setSelectedDices(new Array(NBR_OF_DICES).fill(false));
+        // if (numbers.every((number) => number === true)) {
+        //   setStatus("Game ended");
+        // }
       } else {
         setStatus("You already selected points for " + i);
       }
@@ -136,7 +139,7 @@ export default function Gameboard({ route }) {
           <Icon
             name={'numeric-' + [i] + '-circle'}
             size={32}
-            color={selectedNumbers[i] ? "black" : "tomato"}
+            color={selectedNumbers[i-1] ? "black" : "tomato"}
           />
 
         </Pressable>
