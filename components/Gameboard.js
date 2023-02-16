@@ -14,7 +14,7 @@ import {
 let board = [];
 export default function Gameboard({ route }) {
 
-  const [game, setGame] = useState(false);
+  // const [game, setGame] = useState(false);
   const [turn, setTurn] = useState(false);
   const [nbrOfThrowsLeft, setNbrOfThrowsLeft] = useState(NBR_OF_THROWS);
   const [status, setStatus] = useState('');
@@ -26,7 +26,6 @@ export default function Gameboard({ route }) {
   const [selectedNumbers, setSelectedNumbers] =
     useState(new Array(6).fill(false));
   const [selectedNumber, setSelectedNumber] = useState(null);
-
 
   useEffect(() => {
     if (name === '' && route.params?.player) {
@@ -50,13 +49,17 @@ export default function Gameboard({ route }) {
 
 
   const throwDices = () => {
-    for (let i = 0; i < NBR_OF_DICES; i++) {
-      if (!selectedDices[i]) {
-        let randomNumber = Math.floor(Math.random() * 6 + 1);
-        board[i] = randomNumber;
+    if (nbrOfThrowsLeft != 0) {
+      for (let i = 0; i < NBR_OF_DICES; i++) {
+        if (!selectedDices[i]) {
+          let randomNumber = Math.floor(Math.random() * 6 + 1);
+          board[i] = randomNumber;
+        }
       }
+      setNbrOfThrowsLeft(nbrOfThrowsLeft - 1);
+    } else {
+      setStatus('Select your points before next throw!');
     }
-    setNbrOfThrowsLeft(nbrOfThrowsLeft - 1);
   }
 
   function selectDice(i) {
@@ -64,15 +67,25 @@ export default function Gameboard({ route }) {
     dices[i] = selectedDices[i] ? false : board[i];
     setSelectedDices(dices);
   }
-  function selectNumber(i) {
-    let numbers = [...selectedNumbers];
-    numbers[i] = selectedNumbers[i] ? false : true;
-    setSelectedNumbers(numbers);
-    setSelectedNumber(i);
-    const updatedSumsOfNumbers = [...sumsOfNumbers];
-    updatedSumsOfNumbers[i - 1] = board.filter((val) => val === i).reduce((acc, val) => acc + val, 0);
-    setSumsOfNumbers(updatedSumsOfNumbers);
 
+  function selectNumber(i) {
+    if (nbrOfThrowsLeft === 0) {
+      if (!selectedNumbers[i]) {
+        let numbers = [...selectedNumbers];
+        numbers[i] = selectedNumbers[i] ? false : true;
+        setSelectedNumbers(numbers);
+        setSelectedNumber(i);
+        const updatedSumsOfNumbers = [...sumsOfNumbers];
+        updatedSumsOfNumbers[i - 1] = board.filter((val) => val === i).reduce((acc, val) => acc + val, 0);
+        setSumsOfNumbers(updatedSumsOfNumbers);
+        setNbrOfThrowsLeft(NBR_OF_THROWS);
+        setSelectedDices(new Array(NBR_OF_DICES).fill(false));
+      } else {
+        setStatus("You already selected points for " + i);
+      }
+    } else {
+        setStatus('Throw 3 times before setting points');
+    }
   }
 
   function checkBonusPoints() {
@@ -80,8 +93,7 @@ export default function Gameboard({ route }) {
       setTotalPoints(totalPoints + 50)
     }
     if (nbrOfThrowsLeft === 0) {
-      setNbrOfThrowsLeft(NBR_OF_THROWS);
-      setSelectedDices(new Array(NBR_OF_DICES).fill(false));
+      // setNbrOfThrowsLeft(NBR_OF_THROWS);
     } else if (nbrOfThrowsLeft < 3) {
       setStatus('Select and throw dices again.');
     }
@@ -166,6 +178,7 @@ export default function Gameboard({ route }) {
       <View>{!turn ? <Text>Vuoro ei käynnis</Text> : <Text>Vuoro käynnis</Text>}</View>
       <Text>{`Current State: [${selectedDices.join(', ')}]`}</Text>
       <Text>{`Current State: [${board.join(', ')}]`}</Text>
+      <Text>{`Current State: [${selectedNumbers.join(', ')}]`}</Text>
     </View>
   )
 }
