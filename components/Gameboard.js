@@ -64,8 +64,6 @@ export default function Gameboard({ route }) {
       } else {
         setStatus('Select your points before next throw!');
       }
-    } else {
-
     }
   }
 
@@ -90,7 +88,11 @@ export default function Gameboard({ route }) {
         updatedSumsOfNumbers[i - 1] = board.filter((val) => val === i).reduce((acc, val) => acc + val, 0);
         setSumsOfNumbers(updatedSumsOfNumbers);
         const addPoints = updatedSumsOfNumbers.reduce((acc, val) => acc + val, 0);
-        setTotalPoints(addPoints);
+        if (!bonusPointsAdded) {
+          setTotalPoints(addPoints);
+        } else {
+          setTotalPoints(addPoints + BONUS_POINTS);
+        }
         setNbrOfThrowsLeft(NBR_OF_THROWS);
         setSelectedDices(new Array(NBR_OF_DICES).fill(false));
       } else {
@@ -99,15 +101,18 @@ export default function Gameboard({ route }) {
     } else {
       setStatus('Throw 3 times before setting points');
     }
+
+    // if (selectedNumbers.every((value) => value === true)){
+    //     setStatus('Game over. All points selected');
+    //     setNbrOfThrowsLeft(0);
+    // }
   }
 
   function checkBonusPoints() {
-    if (nbrOfThrowsLeft === 0) {
-    } else if (nbrOfThrowsLeft < 3) {
+    if (nbrOfThrowsLeft < 3) {
       setStatus('Select and throw dices again.');
     }
   }
-
   const diceRow = [];
   for (let i = 0; i < NBR_OF_DICES; i++) {
     if (board[i]) {
@@ -174,7 +179,7 @@ export default function Gameboard({ route }) {
       </Pressable>
       <Text style={{ fontSize: 30, marginTop: 25 }}>Total: {totalPoints}</Text>
       <View>
-        {totalPoints >= BONUS_POINTS_LIMIT ? (
+        {bonusPointsAdded ? (
           <Text>Congrats! Bonus points added</Text>
         ) : (
           <Text>You are {BONUS_POINTS_LIMIT - totalPoints} points away from bonus</Text>
@@ -185,9 +190,6 @@ export default function Gameboard({ route }) {
         Player: {name}
       </Text>
       <View>{!turn ? <Text>Vuoro ei käynnis</Text> : <Text>Vuoro käynnis</Text>}</View>
-      <Text>{`Current State: [${selectedDices.join(', ')}]`}</Text>
-      <Text>{`Current State: [${board.join(', ')}]`}</Text>
-      <Text>{`Current State: [${selectedNumbers.join(', ')}]`}</Text>
     </View>
   )
 }
