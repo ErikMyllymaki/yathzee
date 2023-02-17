@@ -71,7 +71,7 @@ export default function Gameboard({ route }) {
   function selectNumber(i) {
     let numbers = [...selectedNumbers];
     if (nbrOfThrowsLeft === 0) {
-      if (!selectedNumbers[i]) {
+      if (!selectedNumbers[i-1]) {
         numbers[i-1] = true;
         setSelectedNumbers(numbers);
         setSelectedNumber(i);
