@@ -14,7 +14,7 @@ import {
 
 const STORAGE_KEY = '@score_Key';
 let board = [];
-export default function Gameboard({ route, updateScores }) {
+export default function Gameboard({ route  }) {
 
   // const [turn, setTurn] = useState(false);
   const [nbrOfThrowsLeft, setNbrOfThrowsLeft] = useState(NBR_OF_THROWS);
@@ -40,21 +40,6 @@ export default function Gameboard({ route, updateScores }) {
     }
   }
 
-  const getData = async() => {
-    try {
-      return AsyncStorage.getItem(STORAGE_KEY)
-        .then (req => JSON.parse(req))
-        .then (json => {
-          if (json === null) {
-            json = []
-          }
-          setScores(json);
-        })
-        .catch (error => console.log(error));
-    } catch (e) {
-      console.log(e)
-    }
-  }
 
   useEffect(() => {
     checkBonusPoints();
@@ -65,9 +50,8 @@ export default function Gameboard({ route, updateScores }) {
         // setTodos(newTodos);
         storeData(newScores);
         console.log(newScores);
-        updateScores(newScores);
+        // updateScores(newScores);
       }
-      getData();      
   }, [allNumbersSelected]);
 
   useEffect(() => {

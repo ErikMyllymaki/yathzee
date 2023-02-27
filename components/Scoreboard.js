@@ -5,13 +5,28 @@ import Styles from '../style/Styles';
 
 // const STORAGE_KEY = '@score_Key';
 
-export default function Scoreboard({ newScores }) {
+export default function Scoreboard() {
   const [scores, setScores] = useState([]);
 
-  useEffect(() => {
-    setScores(newScores);
-  }, [newScores]);
-  console.log(scores)
+  const getData = async() => {
+    try {
+      return AsyncStorage.getItem(STORAGE_KEY)
+        .then (req => JSON.parse(req))
+        .then (json => {
+          if (json === null) {
+            json = []
+          }
+          setScores(json);
+          console.log(scores)
+        })
+        .catch (error => console.log(error));
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  
+
 
   const sortedScores = scores.sort((a, b) => b.score - a.score);
   const topThreeScores = sortedScores.slice(0, 3);
