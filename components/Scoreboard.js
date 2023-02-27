@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View,Text } from 'react-native';
 import Gameboard from './Gameboard';
 import Styles from '../style/Styles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// const STORAGE_KEY = '@score_Key';
+const STORAGE_KEY = '@score_Key';
 
 export default function Scoreboard() {
   const [scores, setScores] = useState([]);
@@ -17,7 +18,7 @@ export default function Scoreboard() {
             json = []
           }
           setScores(json);
-          console.log(scores)
+          console.log(json)
         })
         .catch (error => console.log(error));
     } catch (e) {
@@ -25,7 +26,9 @@ export default function Scoreboard() {
     }
   }
 
-  
+  useEffect(() => {
+    getData();
+  }, [])
 
 
   const sortedScores = scores.sort((a, b) => b.score - a.score);

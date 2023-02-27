@@ -31,29 +31,41 @@ export default function Gameboard({ route  }) {
   const allNumbersSelected = selectedNumbers.every((value) => value === true);
   const [scores, setScores] = useState([]);
 
-  const storeData = async (value) => {
-    try {
-      const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem(STORAGE_KEY,jsonValue);
-    }catch (e) {
-      console.log(e)
+  // const storeData = async (value) => {
+  //   try {
+  //     const jsonValue = JSON.stringify(value);
+  //     await AsyncStorage.setItem(STORAGE_KEY,jsonValue);
+  //   }catch (e) {
+    //     console.log(e)
+    //   }
+    // }
+    const storeData = async (newScore) => {
+      try {
+        const jsonValue = await AsyncStorage.getItem(STORAGE_KEY);
+        const scores = jsonValue != null ? JSON.parse(jsonValue) : [];
+        const newKey = scores.length + 1;
+        const newScoreWithKey = { key: newKey.toString(), ...newScore };
+        const newScores = [...scores, newScoreWithKey];
+        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newScores));
+        console.log(newScores)
+      }catch (e) {
+        console.log(e)
+      }
     }
-  }
-
-
+  
   useEffect(() => {
     checkBonusPoints();
     if (allNumbersSelected) {
-        const newKey = scores.length + 1;
-        const newScore = {key: newKey.toString(), name: name, score: totalPoints}
-        const newScores = [...scores, newScore];
-        // setTodos(newTodos);
-        storeData(newScores);
-        console.log(newScores);
-        // updateScores(newScores);
-      }
+      const newScore = { name: name, score: totalPoints };
+      storeData(newScore);
+      // const newScores = [...scores, newScore];
+      // setTodos(newTodos);
+      // console.log(newScores);
+      // console.log(scores)
+      // updateScores(newScores);
+    }
   }, [allNumbersSelected]);
-
+  
   useEffect(() => {
     if (name === '' && route.params?.player) {
       setName(route.params.player);
