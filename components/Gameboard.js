@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Styles from '../style/Styles';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, Button } from 'react-native';
 import Icon from '@expo/vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   NBR_OF_DICES,
   NBR_OF_THROWS,
@@ -11,8 +12,9 @@ import {
   BONUS_POINTS
 } from '../constants/constants';
 
+const STORAGE_KEY = '@score_Key';
 let board = [];
-export default function Gameboard({ route }) {
+export default function Gameboard({ route, updateScores }) {
 
   // const [turn, setTurn] = useState(false);
   const [nbrOfThrowsLeft, setNbrOfThrowsLeft] = useState(NBR_OF_THROWS);
@@ -27,16 +29,52 @@ export default function Gameboard({ route }) {
   const [selectedNumber, setSelectedNumber] = useState(null);
   const [bonusPointsAdded, setBonusPointsAdded] = useState(false);
   const allNumbersSelected = selectedNumbers.every((value) => value === true);
+  const [scores, setScores] = useState([]);
+
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem(STORAGE_KEY,jsonValue);
+    }catch (e) {
+      console.log(e)
+    }
+  }
+
+  const getData = async() => {
+    try {
+      return AsyncStorage.getItem(STORAGE_KEY)
+        .then (req => JSON.parse(req))
+        .then (json => {
+          if (json === null) {
+            json = []
+          }
+          setScores(json);
+        })
+        .catch (error => console.log(error));
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  useEffect(() => {
+    checkBonusPoints();
+    if (allNumbersSelected) {
+        const newKey = scores.length + 1;
+        const newScore = {key: newKey.toString(), name: name, score: totalPoints}
+        const newScores = [...scores, newScore];
+        // setTodos(newTodos);
+        storeData(newScores);
+        console.log(newScores);
+        updateScores(newScores);
+      }
+      getData();      
+  }, [allNumbersSelected]);
 
   useEffect(() => {
     if (name === '' && route.params?.player) {
       setName(route.params.player);
     }
   }, [])
-
-  useEffect(() => {
-    checkBonusPoints();
-  }, [nbrOfThrowsLeft]);
 
 
   const throwDices = () => {
