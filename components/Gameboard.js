@@ -14,13 +14,14 @@ import {
 
 const STORAGE_KEY = '@score_Key';
 let board = [];
-export default function Gameboard({ route  }) {
+export default function Gameboard({ route }) {
 
   // const [turn, setTurn] = useState(false);
   const [nbrOfThrowsLeft, setNbrOfThrowsLeft] = useState(NBR_OF_THROWS);
   const [status, setStatus] = useState('');
   const [name, setName] = useState('');
-  const [sumsOfNumbers, setSumsOfNumbers] = useState([0, 0, 0, 0, 0, 0]);
+  const [sumsOfNumbers, setSumsOfNumbers] =
+    useState(new Array(MAX_SPOT).fill(0));
   const [totalPoints, setTotalPoints] = useState(0);
   const [selectedDices, setSelectedDices] =
     useState(new Array(NBR_OF_DICES).fill(false));
@@ -31,46 +32,41 @@ export default function Gameboard({ route  }) {
   const allNumbersSelected = selectedNumbers.every((value) => value === true);
   const [scores, setScores] = useState([]);
 
-  // const storeData = async (value) => {
-  //   try {
-  //     const jsonValue = JSON.stringify(value);
-  //     await AsyncStorage.setItem(STORAGE_KEY,jsonValue);
-  //   }catch (e) {
-    //     console.log(e)
-    //   }
-    // }
-    const storeData = async (newScore) => {
-      try {
-        const jsonValue = await AsyncStorage.getItem(STORAGE_KEY);
-        const scores = jsonValue != null ? JSON.parse(jsonValue) : [];
-        const newKey = scores.length + 1;
-        const newScoreWithKey = { key: newKey.toString(), ...newScore };
-        const newScores = [...scores, newScoreWithKey];
-        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newScores));
-        console.log(newScores)
-      }catch (e) {
-        console.log(e)
-      }
+  const storeData = async (newScore) => {
+    try {
+      const jsonValue = await AsyncStorage.getItem(STORAGE_KEY);
+      const scores = jsonValue != null ? JSON.parse(jsonValue) : [];
+      const newKey = scores.length + 1;
+      const newScoreWithKey = { key: newKey.toString(), ...newScore };
+      const newScores = [...scores, newScoreWithKey];
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newScores));
+      console.log(newScores)
+    } catch (e) {
+      console.log(e)
     }
-  
+  }
+
   useEffect(() => {
     checkBonusPoints();
     if (allNumbersSelected) {
       const newScore = { name: name, score: totalPoints };
       storeData(newScore);
-      // const newScores = [...scores, newScore];
-      // setTodos(newTodos);
-      // console.log(newScores);
-      // console.log(scores)
-      // updateScores(newScores);
     }
   }, [allNumbersSelected]);
-  
+
   useEffect(() => {
     if (name === '' && route.params?.player) {
       setName(route.params.player);
     }
   }, [])
+
+  const resetGame = () => {
+    // setStatus('');
+    setTotalPoints(0);
+    setNbrOfThrowsLeft(NBR_OF_THROWS);
+    setSelectedNumbers(new Array(MAX_SPOT).fill(false));
+    setSumsOfNumbers(new Array(MAX_SPOT).fill(0));
+  }
 
 
   const throwDices = () => {
@@ -90,13 +86,18 @@ export default function Gameboard({ route  }) {
   }
 
   function selectDice(i) {
-    if (nbrOfThrowsLeft != NBR_OF_THROWS) {
-      let dices = [...selectedDices];
-      dices[i] = selectedDices[i] ? false : board[i];
-      setSelectedDices(dices);
+    if (!allNumbersSelected) {
+      if (nbrOfThrowsLeft != NBR_OF_THROWS) {
+        let dices = [...selectedDices];
+        dices[i] = selectedDices[i] ? false : board[i];
+        setSelectedDices(dices);
+      } else {
+        setStatus("You have to throw dices first.");
+      }
     } else {
-      setStatus("You have to throw dices first.");
+      setStatus('Start new game before setting points');
     }
+
   }
 
   function selectNumber(i) {
@@ -112,11 +113,11 @@ export default function Gameboard({ route  }) {
         const addPoints = updatedSumsOfNumbers.reduce((acc, val) => acc + val, 0);
         setNbrOfThrowsLeft(NBR_OF_THROWS);
         setSelectedDices(new Array(NBR_OF_DICES).fill(false));
-          if (!bonusPointsAdded) {
-            setTotalPoints(addPoints);
-          } else {
-            setTotalPoints(addPoints + BONUS_POINTS);
-          }
+        if (!bonusPointsAdded) {
+          setTotalPoints(addPoints);
+        } else {
+          setTotalPoints(addPoints + BONUS_POINTS);
+        }
       } else {
         setStatus("You already selected points for " + i);
       }
@@ -136,7 +137,7 @@ export default function Gameboard({ route  }) {
     if (nbrOfThrowsLeft === NBR_OF_THROWS && !allNumbersSelected) {
       setStatus('Throw dices.');
       // setTurn(false)
-    } else if (allNumbersSelected){
+    } else if (allNumbersSelected) {
       setStatus('Game over. All Points selected.');
       setNbrOfThrowsLeft(0);
       // setTurn(true)
@@ -166,7 +167,7 @@ export default function Gameboard({ route  }) {
   }
 
   const numRow = [];
-  for (let i = MIN_SPOT; i < MAX_SPOT+1; i++) {
+  for (let i = MIN_SPOT; i < MAX_SPOT + 1; i++) {
     numRow.push(
       <View key={'numrow' + i} style={{ justifyContent: 'center', alignItems: 'center', paddingHorizontal: 5 }}>
         <Pressable
@@ -199,12 +200,22 @@ export default function Gameboard({ route  }) {
       <Text style={Styles.info}>
         {status}
       </Text>
-      <Pressable
-        style={Styles.button}
-        onPress={() => throwDices()}
-      >
-        <Text style={Styles.buttonText}>Throw dices</Text>
-      </Pressable>
+      {!allNumbersSelected ?
+        <Pressable
+          style={Styles.button}
+          onPress={() => throwDices()}
+        >
+          <Text style={Styles.buttonText}>Throw dices</Text>
+        </Pressable>
+        :
+        <Pressable
+          style={Styles.button}
+          onPress={() => resetGame()}
+        >
+          <Text style={Styles.buttonText}>Reset game</Text>
+        </Pressable>
+      }
+
       <Text style={{ fontSize: 30, marginTop: 25 }}>Total: {totalPoints}</Text>
       <View>
         {bonusPointsAdded ? (

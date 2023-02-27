@@ -35,11 +35,11 @@ export default function Scoreboard() {
   const topThreeScores = sortedScores.slice(0, 3);
 
   return (
-    <View>
-      <Text>Top three scores:</Text>
-      {topThreeScores.map((score) => (
-        <Text key={score.key}>{score.name}: {score.score}</Text>
-      ))}
+    <View style={Styles.container}>
+      <Text style={Styles.heading}>Top three scores:</Text>
+        {topThreeScores.map((score) => (
+          <Text key={score.key}>{score.name}: {score.score}</Text>
+        ))}
     </View>
   );
 }
