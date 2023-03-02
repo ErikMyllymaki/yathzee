@@ -9,10 +9,8 @@ export default function Home( {navigation} ) {
 
     const [name, setName] = useState('');
     const [checkName, setCheckName] = useState(false);
-    const [showRules, setShowRules] = useState(true);
 
     const Game = () => {
-        if (showRules) {
             return (
                 <View style={Styles.container}>
                     <Icon
@@ -39,14 +37,7 @@ export default function Home( {navigation} ) {
                         <Text style={Styles.buttonText}>Play</Text>
                     </Pressable>
                 </View>
-
             )
-        } 
-        // else {
-        //     return (
-        //         <Gameboard />
-        //     )
-        // }
 
     }
 

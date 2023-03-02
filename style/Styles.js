@@ -79,4 +79,17 @@ export default StyleSheet.create({
     flex: {
         flexDirection: "row"
       },
+    
+    score: {
+        borderBottomWidth: 1,
+        borderBottomColor: 'tomato',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+    },
+
+    scoreText: {
+        color: 'tomato',
+        fontWeight: 'bold',
+    }
   });

@@ -16,7 +16,6 @@ const STORAGE_KEY = '@score_Key';
 let board = [];
 export default function Gameboard({ route }) {
 
-  // const [turn, setTurn] = useState(false);
   const [nbrOfThrowsLeft, setNbrOfThrowsLeft] = useState(NBR_OF_THROWS);
   const [status, setStatus] = useState('');
   const [name, setName] = useState('');
@@ -30,7 +29,6 @@ export default function Gameboard({ route }) {
   const [selectedNumber, setSelectedNumber] = useState(null);
   const [bonusPointsAdded, setBonusPointsAdded] = useState(false);
   const allNumbersSelected = selectedNumbers.every((value) => value === true);
-  const [scores, setScores] = useState([]);
 
   const storeData = async (newScore) => {
     try {
@@ -40,7 +38,6 @@ export default function Gameboard({ route }) {
       const newScoreWithKey = { key: newKey.toString(), ...newScore };
       const newScores = [...scores, newScoreWithKey];
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newScores));
-      console.log(newScores)
     } catch (e) {
       console.log(e)
     }
@@ -61,7 +58,6 @@ export default function Gameboard({ route }) {
   }, [])
 
   const resetGame = () => {
-    // setStatus('');
     setTotalPoints(0);
     setNbrOfThrowsLeft(NBR_OF_THROWS);
     setSelectedNumbers(new Array(MAX_SPOT).fill(false));
@@ -136,11 +132,9 @@ export default function Gameboard({ route }) {
     }
     if (nbrOfThrowsLeft === NBR_OF_THROWS && !allNumbersSelected) {
       setStatus('Throw dices.');
-      // setTurn(false)
     } else if (allNumbersSelected) {
       setStatus('Game over. All Points selected.');
       setNbrOfThrowsLeft(0);
-      // setTurn(true)
     }
     if (nbrOfThrowsLeft < 0) {
       setNbrOfThrowsLeft(NBR_OF_THROWS - 1);
@@ -228,7 +222,6 @@ export default function Gameboard({ route }) {
       <Text style={Styles.info}>
         Player: {name}
       </Text>
-      {/* <View>{!turn ? <Text>Vuoro ei käynnis</Text> : <Text>Vuoro käynnis</Text>}</View> */}
     </View>
   )
 }

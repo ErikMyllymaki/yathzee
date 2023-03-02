@@ -16,10 +16,21 @@ export default function App() {
   return (
     <NavigationContainer>
       <Header />
-      <Tab.Navigator>
-        <Tab.Screen name='Home' component={Home} options={{tabBarStyle: {display: 'none'}}}/>
-        <Tab.Screen name='Gameboard' component={Gameboard} options={{tabBarStyle: {backgroundColor: 'tomato'}}}/>
-        <Tab.Screen name='Scoreboard' component={Scoreboard} options={{tabBarStyle: {backgroundColor: 'tomato'}}} />
+      <Tab.Navigator
+        tabBarOptions={{
+          tabStyle: {
+            padding: 15
+          },
+          labelStyle: {
+            fontSize: 16,
+            fontWeight: 'bold',
+          },
+          activeTintColor: 'tomato',
+          inactiveTintColor: 'gray',
+        }}>
+        <Tab.Screen name='Home' component={Home} options={{ tabBarStyle: { display: 'none' } }} />
+        <Tab.Screen name='Gameboard' component={Gameboard} />
+        <Tab.Screen name='Scoreboard' component={Scoreboard} />
       </Tab.Navigator>
       <Footer />
     </NavigationContainer>
